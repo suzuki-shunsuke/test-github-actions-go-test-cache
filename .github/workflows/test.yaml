@@ -7,7 +7,7 @@ on:
   pull_request:
 jobs:
   test:
-    name: lint
+    name: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -32,9 +32,9 @@ jobs:
           cache-name: go-cache
         with:
           path: "/home/runner/.cache/go-build"
-          key: ${{runner.os}}-${{env.cache-name}}-1-${{github.evnet.after}}
+          key: ${{runner.os}}-${{env.cache-name}}-1-${{github.event.after}}
           restore-keys: |
-            ${{runner.os}}-${{env.cache-name}}-1-${{github.evnet.before}}
+            ${{runner.os}}-${{env.cache-name}}-1-${{github.event.before}}
             ${{runner.os}}-${{env.cache-name}}-1-
       - name: Test
         run: time go test -v -race ./...
