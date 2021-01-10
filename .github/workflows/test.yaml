@@ -21,7 +21,7 @@ jobs:
         env:
           cache-name: go-cache
         with:
-          path: ${{ env.GOCACHE }}
+          path: "/home/runner/.cache/go-build"
           key: ${{ runner.os }}-${{ env.cache-name }}-1-${{github.event.pull_request.base.sha}}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-1-
@@ -31,9 +31,10 @@ jobs:
         env:
           cache-name: go-cache
         with:
-          path: ${{env.GOCACHE}}
-          key: ${{runner.os}}-${{env.cache-name}}-1-${{env.GITHUB_SHA}}
+          path: "/home/runner/.cache/go-build"
+          key: ${{runner.os}}-${{env.cache-name}}-1-${{github.evnet.after}}
           restore-keys: |
+            ${{runner.os}}-${{env.cache-name}}-1-${{github.evnet.before}}
             ${{runner.os}}-${{env.cache-name}}-1-
       - name: Test
         run: time go test -v -race ./...
