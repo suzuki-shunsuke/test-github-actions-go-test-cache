@@ -22,8 +22,9 @@ jobs:
           cache-name: go-cache
         with:
           path: "/home/runner/.cache/go-build"
-          key: ${{ runner.os }}-${{ env.cache-name }}-1-${{github.event.pull_request.base.sha}}
+          key: ${{ runner.os }}-${{ env.cache-name }}-1-${{github.event.pull_request.head.sha}}
           restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-1-${{github.event.pull_request.base.sha}}
             ${{ runner.os }}-${{ env.cache-name }}-1-
       - name: cache Go
         if: ${{github.event_name == 'push'}}
@@ -32,6 +33,28 @@ jobs:
           cache-name: go-cache
         with:
           path: "/home/runner/.cache/go-build"
+          key: ${{runner.os}}-${{env.cache-name}}-1-${{github.event.after}}
+          restore-keys: |
+            ${{runner.os}}-${{env.cache-name}}-1-${{github.event.before}}
+            ${{runner.os}}-${{env.cache-name}}-1-
+      - name: cache Go Module
+        if: ${{github.event_name == 'pull_request'}}
+        uses: actions/cache@v2
+        env:
+          cache-name: go-module
+        with:
+          path: "/home/runner/go/pkg/mod"
+          key: ${{ runner.os }}-${{ env.cache-name }}-1-${{github.event.pull_request.head.sha}}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-1-${{github.event.pull_request.base.sha}}
+            ${{ runner.os }}-${{ env.cache-name }}-1-
+      - name: cache Go Module
+        if: ${{github.event_name == 'push'}}
+        uses: actions/cache@v2
+        env:
+          cache-name: go-module
+        with:
+          path: "/home/runner/go/pkg/mod"
           key: ${{runner.os}}-${{env.cache-name}}-1-${{github.event.after}}
           restore-keys: |
             ${{runner.os}}-${{env.cache-name}}-1-${{github.event.before}}
